@@ -4,31 +4,32 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
@@ -37,7 +38,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.apprecuperacionfranciscopereztejera.R
 import com.example.apprecuperacionfranciscopereztejera.ui.components.AppBar
-import com.example.apprecuperacionfranciscopereztejera.ui.components.CardItem
 import com.example.apprecuperacionfranciscopereztejera.ui.components.DrawerBody
 import com.example.apprecuperacionfranciscopereztejera.ui.components.DrawerHeader
 import com.example.apprecuperacionfranciscopereztejera.ui.components.MenuItem
@@ -45,12 +45,14 @@ import com.example.apprecuperacionfranciscopereztejera.ui.nuevousuario.PantallaN
 import com.example.apprecuperacionfranciscopereztejera.ui.pantallaadd.PantallaAdd
 import com.example.apprecuperacionfranciscopereztejera.ui.pantallahome.PantallaHome
 import com.example.apprecuperacionfranciscopereztejera.ui.pantallalogin.PantallaLogin
+import com.example.apprecuperacionfranciscopereztejera.ui.pantallanotificacion.NotificationScreen
+import com.example.apprecuperacionfranciscopereztejera.ui.pantallavehiculo.VehiculoScreen
 import com.example.apprecuperacionfranciscopereztejera.ui.ruta.Rutas
 import kotlinx.coroutines.launch
 
 @SuppressLint(
     "UnusedMaterial3ScaffoldPaddingParameter", "ComposableDestinationInComposeScope",
-    "SuspiciousIndentation", "UnusedMaterialScaffoldPaddingParameter"
+    "SuspiciousIndentation", "UnusedMaterialScaffoldPaddingParameter", "RememberReturnType"
 )
 @Composable
 fun GrafoDeNavegacion() {
@@ -60,6 +62,9 @@ fun GrafoDeNavegacion() {
 
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
     val showScaffold = currentDestination != Rutas.PantallaLogin.ruta && currentDestination != Rutas.PantallaNuevoUsuario.ruta
+
+    val selectedItems = remember { mutableStateListOf<Int>() }
+    var showCheckboxes by remember { mutableStateOf(false) }
 
     if (showScaffold) {
         Scaffold(
@@ -123,6 +128,10 @@ fun GrafoDeNavegacion() {
                     )
                 }
             },
+            floatingActionButton = {
+                if (selectedItems.isNotEmpty()) {
+                }
+            },
             bottomBar = {
                 Row(
                     modifier = Modifier
@@ -147,7 +156,7 @@ fun GrafoDeNavegacion() {
                             modifier = Modifier.size(30.dp)
                         )
                     }
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navController.navigate(Rutas.PantallaNotificacion.ruta) }) {
                         Icon(
                             painter = painterResource(id = R.drawable.icons8_recordatorios_de_citas_24),
                             contentDescription = "",
@@ -171,6 +180,12 @@ fun GrafoDeNavegacion() {
                     composable(Rutas.PantallaAdd.ruta) {
                         PantallaAdd(navController = navController)
                     }
+                    composable(Rutas.PantallaVehiculo.ruta) {
+                        VehiculoScreen(navController = navController)
+                    }
+                    composable(Rutas.PantallaNotificacion.ruta) {
+                        NotificationScreen(navController = navController)
+                    }
                 }
             }
         )
@@ -188,6 +203,18 @@ fun GrafoDeNavegacion() {
             composable(Rutas.PantallaAdd.ruta) {
                 PantallaAdd(navController = navController)
             }
+            composable(Rutas.PantallaVehiculo.ruta) {
+                VehiculoScreen(navController = navController)
+            }
+            composable(Rutas.PantallaNotificacion.ruta) {
+                NotificationScreen(navController = navController)
+            }
         }
     }
+}
+
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+fun LoginPreview() {
+    GrafoDeNavegacion()
 }

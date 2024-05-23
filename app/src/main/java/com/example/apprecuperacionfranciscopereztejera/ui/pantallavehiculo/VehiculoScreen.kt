@@ -1,4 +1,4 @@
-package com.example.apprecuperacionfranciscopereztejera.ui.pantallaadd
+package com.example.apprecuperacionfranciscopereztejera.ui.pantallavehiculo
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -12,17 +12,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,18 +22,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.apprecuperacionfranciscopereztejera.ui.pantallaadd.DropDownMenuCustom
 import com.example.apprecuperacionfranciscopereztejera.ui.ruta.Rutas
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaAdd(navController: NavController?) {
+fun VehiculoScreen(navController: NavController) {
 
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("Item 1", "Item 2", "Item 3")
@@ -60,18 +51,20 @@ fun PantallaAdd(navController: NavController?) {
     ) {
         item {
             Text(
-                text = "Selecciona un tipo de vehículo",
+                text = "Datos del vehículo",
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 20.sp,
                 color = Color.White
             )
-            DropDownMenuCustom(
-                expanded = expanded,
-                onExpandedChange = { expanded = it },
-                items = items,
-                selectedItem = selectedItem,
-                onItemSelected = { selectedItem = it }
+            TextField(
+                value = "Tipo de Vehículo",
+                onValueChange = {  },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 30.dp, end = 30.dp, top = 20.dp, bottom = 20.dp)
+                    .background(Color(red = 62, green = 62, blue = 62))
             )
+
         }
         item {
             Text(
@@ -160,60 +153,4 @@ fun PantallaAdd(navController: NavController?) {
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DropDownMenuCustom(
-    expanded: Boolean,
-    onExpandedChange: (Boolean) -> Unit,
-    items: List<String>,
-    selectedItem: String,
-    onItemSelected: (String) -> Unit
-) {
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = onExpandedChange,
-    ) {
-        TextField(
-            value = selectedItem,
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = {
-                Icon(
-                    imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = null,
-                    modifier = Modifier.rotate(if (expanded) 180f else 0f)
-                )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 30.dp, end = 30.dp, bottom = 20.dp, top = 20.dp)
-                .background(Color(red = 62, green = 62, blue = 62))
-        )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { onExpandedChange(false) }
-        ) {
-            items.forEach { item ->
-                DropdownMenuItem(
-                    text = { Text(
-                        text = item,
-                        color = Color.White) },
-                    onClick = {
-                        onItemSelected(item)
-                        onExpandedChange(false)
-                    }
-                )
-            }
-        }
-    }
-}
-
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun LoginPreview() {
-    PantallaAdd(navController = null)
 }
