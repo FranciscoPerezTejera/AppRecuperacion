@@ -44,7 +44,7 @@ import com.example.apprecuperacionfranciscopereztejera.ui.nuevousuario.PantallaN
 import com.example.apprecuperacionfranciscopereztejera.ui.pantallaadd.PantallaAdd
 import com.example.apprecuperacionfranciscopereztejera.ui.pantallahome.PantallaHome
 import com.example.apprecuperacionfranciscopereztejera.ui.pantallalogin.PantallaLogin
-import com.example.apprecuperacionfranciscopereztejera.ui.pantallanotificacion.NotificationScreen
+import com.example.apprecuperacionfranciscopereztejera.ui.pantallausuarioedit.PantallaEditUsuario
 import com.example.apprecuperacionfranciscopereztejera.ui.pantallavehiculo.VehiculoScreen
 import com.example.apprecuperacionfranciscopereztejera.ui.ruta.Rutas
 import kotlinx.coroutines.launch
@@ -155,9 +155,9 @@ fun GrafoDeNavegacion(viewModel: ViewModel) {
                             modifier = Modifier.size(30.dp)
                         )
                     }
-                    IconButton(onClick = { navController.navigate(Rutas.PantallaNotificacion.ruta) }) {
+                    IconButton(onClick = { navController.navigate(Rutas.PantallaUsuarioEdit.ruta) }) {
                         Icon(
-                            painter = painterResource(id = R.drawable.icons8_recordatorios_de_citas_24),
+                            painter = painterResource(id = R.drawable.icons8_invitado_masculino_48),
                             contentDescription = "",
                             tint = Color.White,
                             modifier = Modifier.size(30.dp)
@@ -183,8 +183,8 @@ fun GrafoDeNavegacion(viewModel: ViewModel) {
                     composable(Rutas.PantallaVehiculo.ruta) {
                         VehiculoScreen(navController = navController, viewModel)
                     }
-                    composable(Rutas.PantallaNotificacion.ruta) {
-                        NotificationScreen(navController = navController, viewModel)
+                    composable(Rutas.PantallaUsuarioEdit.ruta) {
+                        PantallaEditUsuario(navController = navController, viewModel)
                     }
                 }
             }
@@ -207,8 +207,8 @@ fun GrafoDeNavegacion(viewModel: ViewModel) {
             composable(Rutas.PantallaVehiculo.ruta) {
                 VehiculoScreen(navController = navController, viewModel)
             }
-            composable(Rutas.PantallaNotificacion.ruta) {
-                NotificationScreen(navController = navController, viewModel)
+            composable(Rutas.PantallaUsuarioEdit.ruta) {
+                PantallaEditUsuario(navController = navController, viewModel)
             }
         }
     }

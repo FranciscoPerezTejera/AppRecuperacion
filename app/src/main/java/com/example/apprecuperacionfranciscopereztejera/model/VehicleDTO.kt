@@ -4,6 +4,6 @@ data class VehicleDTO(
     var brand : String,
     var modelName : String,
     var price : Double,
-    var imageName : String,
-    var id_user : Int
+    var imageModel : String,
+    var userId : Int
 )

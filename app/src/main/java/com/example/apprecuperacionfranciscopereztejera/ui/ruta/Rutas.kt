@@ -7,6 +7,6 @@ sealed class Rutas (val ruta : String) {
     object PantallaAdd : Rutas("pantallaadd")
     object PantallaVehiculo : Rutas("pantallavehiculo")
 
-    object PantallaNotificacion : Rutas("pantallanotificacion")
+    object PantallaUsuarioEdit : Rutas("pantallausuarioedit")
 
 }

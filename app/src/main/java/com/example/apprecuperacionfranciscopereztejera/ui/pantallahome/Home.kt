@@ -1,22 +1,30 @@
 package com.example.apprecuperacionfranciscopereztejera.ui.pantallahome
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.twotone.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,20 +37,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.apprecuperacionfranciscopereztejera.model.Vehicle
 import com.example.apprecuperacionfranciscopereztejera.repositorio.ViewModel
 import com.example.apprecuperacionfranciscopereztejera.ui.components.CardItem
 import com.example.apprecuperacionfranciscopereztejera.ui.ruta.Rutas
-import kotlinx.coroutines.selects.selectUnbiased
-
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -50,8 +55,7 @@ fun PantallaHome(navController: NavController?, viewModel: ViewModel) {
     val selectedItems = remember { mutableStateListOf<Vehicle>() }
     var showCheckboxes by remember { mutableStateOf(false) }
     val vehicleList by viewModel.vehicleList.collectAsState()
-    var searchText by remember { mutableStateOf(TextFieldValue()) }
-
+    var searchText by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         viewModel.getAllVehiclesFromUser()
@@ -71,6 +75,7 @@ fun PantallaHome(navController: NavController?, viewModel: ViewModel) {
             fontSize = 30.sp,
             color = Color.White
         )
+
         OutlinedTextField(
             value = searchText,
             onValueChange = { searchText = it },
@@ -80,7 +85,6 @@ fun PantallaHome(navController: NavController?, viewModel: ViewModel) {
             textStyle = TextStyle(color = Color.White),
             label = { Text("Buscar...", color = Color.White) },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = Color.White,
                 cursorColor = Color.White,
                 focusedBorderColor = Color.White,
                 unfocusedBorderColor = Color.White,
@@ -96,9 +100,8 @@ fun PantallaHome(navController: NavController?, viewModel: ViewModel) {
         )
 
         val filteredList = vehicleList?.filter {
-            it.brand.equals(searchText.text, ignoreCase = true)
+            it.brand.equals(searchText, ignoreCase = true)
         } ?: emptyList()
-
 
         Button(
             enabled =selectedItems.isNotEmpty(),
@@ -117,6 +120,7 @@ fun PantallaHome(navController: NavController?, viewModel: ViewModel) {
         ) {
             Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
         }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()

@@ -36,14 +36,16 @@ interface CarServicePro {
     suspend fun saveVehicle(@Body vehicle: VehicleDTO) : Response<Void>
 
     @POST("carservicepro/user")
-    suspend fun createUser(@Body user : UserDTO) : Response<Void>
+    suspend fun createUser(@Body user : User) : Response<Void>
 
     @DELETE("carservicepro/vehicle/delete/{id}")
     suspend fun deleteVehicle(@Path("id") id : Int) : Response<Void>
 
-    @PUT("/carservicespro/vehicle")
+    @PUT("/carservicepro/vehicle")
     suspend fun updateVehicle( @Body vehicle: VehicleDTO) : Response<Void>
 
+    @PUT("/carservicepro/user")
+    suspend fun updateUser( @Body user: User) : Response<Void>
 
     object RetrofitServiceFactory {
         fun makeRetrofitService() : CarServicePro {

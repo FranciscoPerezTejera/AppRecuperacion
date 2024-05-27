@@ -41,9 +41,9 @@ fun VehiculoScreen(navController: NavController, viewModel: ViewModel) {
     var precio by remember { mutableStateOf("") }
     var vehicle: Vehicle? = null
 
-    /*LaunchedEffect(Unit) {
+    LaunchedEffect(Unit) {
         vehicle = viewModel.getVehicleById()
-    }*/
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -62,8 +62,8 @@ fun VehiculoScreen(navController: NavController, viewModel: ViewModel) {
                 color = Color.White
             )
             TextField(
-                value = "vehicle!!.brand",
-                onValueChange = { "vehicle!!.brand = it" },
+                value = vehicle!!.brand,
+                onValueChange = { vehicle!!.brand = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 30.dp, end = 30.dp, top = 20.dp, bottom = 20.dp)

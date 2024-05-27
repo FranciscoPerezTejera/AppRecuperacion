@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.apprecuperacionfranciscopereztejera.data.CarServicePro
 import com.example.apprecuperacionfranciscopereztejera.model.User
-import com.example.apprecuperacionfranciscopereztejera.model.UserDTO
 import com.example.apprecuperacionfranciscopereztejera.model.Vehicle
 import com.example.apprecuperacionfranciscopereztejera.model.VehicleDTO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,8 +44,8 @@ class ViewModel : ViewModel() {
     private val _imageVehicle = MutableStateFlow("")
     var imageVehicle = _imageVehicle.asStateFlow()
 
-    var _idVehicleUpdate: Int = 0
-    var _user: User? = null
+    var idVehicleUpdate: Int = 0
+    var user: User? = null
 
     init {
         getAllUsers()
@@ -80,7 +79,7 @@ class ViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val service = CarServicePro.RetrofitServiceFactory.makeRetrofitService()
-                val response = service.getByUsername(_user!!.email)
+                val response = service.getByUsername(user!!.email)
 
                 if (response.isSuccessful) {
                     _estadoLlamada.value = estadoApi.SUCCESS
@@ -105,7 +104,7 @@ class ViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val service = CarServicePro.RetrofitServiceFactory.makeRetrofitService()
-                val response = service.getVehicleById(_idVehicleUpdate)
+                val response = service.getVehicleById(idVehicleUpdate)
 
                 if (response.isSuccessful) {
                     _estadoLlamada.value = estadoApi.SUCCESS
@@ -163,11 +162,11 @@ class ViewModel : ViewModel() {
     }
 
     fun updateVehicleFromUser(id: Int, vehicle: Vehicle) {
-        /*_estadoLlamada.value = estadoApi.LOADING
+        _estadoLlamada.value = estadoApi.LOADING
         viewModelScope.launch {
             try {
                 val service = CarServicePro.RetrofitServiceFactory.makeRetrofitService()
-                val vehicleDTO = VehicleDTO(vehicle.brand,vehicle.modelName, vehicle.price, vehicle.imageName, id)
+                val vehicleDTO = VehicleDTO(vehicle.brand,vehicle.modelName, vehicle.price, vehicle.imageModel, id)
                 val response = service.updateVehicle(vehicleDTO)
 
                 if (response.isSuccessful) {
@@ -182,10 +181,10 @@ class ViewModel : ViewModel() {
                 Log.d("Error al actualizar un vehículo: ", e.message.toString())
                 _estadoLlamada.value = estadoApi.ERROR
             }
-        }*/
+        }
     }
 
-    fun addUser(user: UserDTO) {
+    fun addUser(user: User) {
 
         viewModelScope.launch {
             val service = CarServicePro.RetrofitServiceFactory.makeRetrofitService()
@@ -201,9 +200,33 @@ class ViewModel : ViewModel() {
         }
     }
 
-    fun newVehicle(marca: String, modelo: String, precio: Double, imageName: String): VehicleDTO? {
-        val vehicle = VehicleDTO(marca, modelo, precio, imageName, _user!!.id)
+    fun newVehicle(marca: String, modelo: String, precio: Double, imageModel: String) : VehicleDTO? {
+        val vehicle = VehicleDTO(marca, modelo, precio, imageModel, user!!.id)
         Log.e("VEHICLE: ", vehicle.toString())
         return vehicle
+    }
+
+    fun updateUser(email: String, password: String) {
+
+        _estadoLlamada.value = estadoApi.LOADING
+
+        viewModelScope.launch {
+            try {
+                val service = CarServicePro.RetrofitServiceFactory.makeRetrofitService()
+                var user = User(user!!.id, email, password, user!!.vehicles)
+                val response = service.updateUser(user)
+
+                if (response.isSuccessful) {
+                    getAllUsers()
+                    _estadoLlamada.value = estadoApi.SUCCESS
+                } else {
+                    _estadoLlamada.value = estadoApi.ERROR
+                }
+            } catch (e: Exception) {
+                _estadoLlamada.value = estadoApi.ERROR
+            }
+            _estadoLlamada.value = estadoApi.SUCCESS
+            Log.e("Valor de State : ", estadoLlamada.value.toString())
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.apprecuperacionfranciscopereztejera.ui.nuevousuario
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.apprecuperacionfranciscopereztejera.R
-import com.example.apprecuperacionfranciscopereztejera.model.UserDTO
+import com.example.apprecuperacionfranciscopereztejera.model.User
 import com.example.apprecuperacionfranciscopereztejera.repositorio.ViewModel
 import com.example.apprecuperacionfranciscopereztejera.ui.ruta.Rutas
 
@@ -142,8 +143,9 @@ fun PantallaNuevoUsuario(navController: NavController?, viewModel: ViewModel) {
         val user = null
         Button(
             onClick = {
-                var user = UserDTO(email, password)
+                var user = User(viewModel.user!!.id, email, password, null)
                 viewModel.addUser(user)
+                Log.e("EL USUARIO A ACTUALIZAR: ", user.toString())
                 navController?.navigate(Rutas.PantallaLogin.ruta) },
             modifier = Modifier
                 .fillMaxWidth()

@@ -38,7 +38,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.apprecuperacionfranciscopereztejera.R
 import com.example.apprecuperacionfranciscopereztejera.model.User
@@ -92,6 +91,7 @@ fun PantallaLogin(navController: NavController?, viewModel: ViewModel) {
                                 .height(60.dp)
                                 .clip(RoundedCornerShape(5.dp)),
                         textStyle = TextStyle(color = Color.White),
+                        singleLine = true,
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = Color.White,
                                 unfocusedBorderColor = Color.Gray
@@ -107,6 +107,7 @@ fun PantallaLogin(navController: NavController?, viewModel: ViewModel) {
                                 .fillMaxWidth()
                                 .height(60.dp)
                                 .clip(RoundedCornerShape(5.dp)),
+                        singleLine = true,
                         textStyle = TextStyle(color = Color.White),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = Color.White,
@@ -119,11 +120,8 @@ fun PantallaLogin(navController: NavController?, viewModel: ViewModel) {
                         onClick = {
                                 usuario = userList?.find { it.email == user }
                                 usuarioEncontrado = userList!!.any { it.email == user}
-                                viewModel._user = usuario
-                                Log.e("USUARIO", viewModel._user.toString())
-                                /*if (usuario != null) {
-                                        val correcta: Boolean = viewModel.checkPassword(usuario!!.password)
-                                }*/
+                                viewModel.user = usuario
+                                Log.e("USUARIO", viewModel.user.toString())
                                 if (usuarioEncontrado) {
                                         navController?.navigate(Rutas.PantallaHome.ruta)
                                 }

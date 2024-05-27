@@ -1,7 +1,5 @@
-package com.example.apprecuperacionfranciscopereztejera.ui.pantallaadd
+package com.example.apprecuperacionfranciscopereztejera.ui.pantallausuarioedit
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,16 +9,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -30,55 +25,46 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ClipboardManager
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
-import com.example.apprecuperacionfranciscopereztejera.model.Vehicle
 import com.example.apprecuperacionfranciscopereztejera.repositorio.ViewModel
 import com.example.apprecuperacionfranciscopereztejera.ui.ruta.Rutas
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaAdd(navController: NavController?, viewModel: ViewModel) {
+fun PantallaEditUsuario(navController: NavController, viewModel: ViewModel) {
 
-    var marca by remember { mutableStateOf("") }
-    var modelo by remember { mutableStateOf("") }
-    var precio by remember { mutableStateOf("") }
-    var imageModel by remember { mutableStateOf("") }
-
-    val clipboardManager: ClipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var repeatPassword by remember { mutableStateOf("") }
+    var showDialog by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
             .background(Color(red = 42, green = 42, blue = 42))
             .fillMaxSize()
-            .padding(top  = 20.dp,bottom = 80.dp),
+            .padding(top = 20.dp, bottom = 80.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         item {
             Text(
-                text = "Marca del vehículo",
+                text = "introduce el email",
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 20.sp,
                 color = Color.White
             )
             OutlinedTextField(
-                value = marca,
-                onValueChange = { marca = it },
-                placeholder = { Text("Marca del vehiculo", color = Color.White) },
+                value = email,
+                onValueChange = { email = it },
+                placeholder = { Text(" Introduce email", color = Color.White) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 30.dp, end = 30.dp, top = 10.dp, bottom = 20.dp),
@@ -92,17 +78,18 @@ fun PantallaAdd(navController: NavController?, viewModel: ViewModel) {
                 )
             )
         }
+
         item {
             Text(
-                text = "Modelo del vehículo",
+                text = "Nueva Contraseña",
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 20.sp,
                 color = Color.White
             )
             OutlinedTextField(
-                value = modelo,
-                onValueChange = { modelo = it },
-                placeholder = { Text("Marca del vehiculo", color = Color.White) },
+                value = password,
+                onValueChange = { password = it },
+                placeholder = { Text("Introduce la nueva contraseña", color = Color.White) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 30.dp, end = 30.dp, top = 10.dp, bottom = 20.dp),
@@ -116,17 +103,18 @@ fun PantallaAdd(navController: NavController?, viewModel: ViewModel) {
                 )
             )
         }
+
         item {
             Text(
-                text = "Precio del vehículo",
+                text = "Repita Contraseña",
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 20.sp,
                 color = Color.White
             )
             OutlinedTextField(
-                value = precio,
-                onValueChange = { precio = it },
-                placeholder = { Text("Marca del vehiculo", color = Color.White) },
+                value = repeatPassword,
+                onValueChange = { repeatPassword = it },
+                placeholder = { Text("Repetir Contraseña", color = Color.White) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 30.dp, end = 30.dp, top = 10.dp, bottom = 20.dp),
@@ -140,60 +128,17 @@ fun PantallaAdd(navController: NavController?, viewModel: ViewModel) {
                 )
             )
         }
-        item {
-            Text(
-                text = "Imagen del vehículo",
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 20.sp,
-                color = Color.White
-            )
-            OutlinedTextField(
-                value = imageModel,
-                onValueChange = { imageModel = it },
-                placeholder = { Text("Marca del vehiculo", color = Color.White) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 30.dp, end = 30.dp, top = 10.dp, bottom = 20.dp),
-                textStyle = TextStyle(
-                    color = Color.White,
-                    textAlign = TextAlign.Center),
-                singleLine = true,
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.Gray
-                ),
-                trailingIcon = {
-                    IconButton(onClick = {
-                        val clipboardText = clipboardManager.getText()
-                        if (clipboardText != null) {
-                            imageModel = clipboardText.text
-                            Toast.makeText(context, "Texto Pegago", Toast.LENGTH_SHORT)
-                        } else {
-                            Toast.makeText(context, "Portapapeles vacío", Toast.LENGTH_SHORT)
-                        }
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Paste Icon",
-                            tint = Color.White
-                        )
-                    }
-                }
-            )
-        }
+
         item {
             Button(
                 onClick = {
-                    if (imageModel == null || imageModel == "") {
-                        imageModel = "https://img.freepik.com/vector-premium/caracter-cara-coche-divertido-emoticon-coche-rojo-sonrie-iconos-ilustracion-vectorial_55610-8973.jpg"
+                    if (password == repeatPassword) {
+                        viewModel.updateUser(email, password)
+                        navController?.navigate(Rutas.PantallaHome.ruta)
+                    } else {
+                        showDialog = true
                     }
-                    var vehiculo = viewModel.newVehicle(marca, modelo, precio.toDouble(), imageModel)
-
-                    if (vehiculo != null) {
-                        viewModel.addVehicleToUser(vehiculo)
-                    }
-                    navController?.navigate(Rutas.PantallaHome.ruta)
-                          },
+                },
                 modifier = Modifier
                     .padding(start = 30.dp, end = 30.dp, top = 20.dp)
                     .fillMaxWidth()
@@ -205,7 +150,7 @@ fun PantallaAdd(navController: NavController?, viewModel: ViewModel) {
                 )
             ) {
                 Text(
-                    text = "Añadir Vehículo",
+                    text = "Actualizar Usuario",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp,
                     color = Color.White
@@ -213,10 +158,26 @@ fun PantallaAdd(navController: NavController?, viewModel: ViewModel) {
             }
         }
     }
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun LoginPreview() {
-  //  PantallaAdd(navController = null, 0, "")
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            confirmButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text("Aceptar")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text("Cancelar")
+                }
+            },
+            title = {
+                Text("Error")
+            },
+            text = {
+                Text("as contraseñas no coincide o hay algun error.")
+            },
+            properties = DialogProperties(dismissOnClickOutside = false)
+        )
+    }
 }
