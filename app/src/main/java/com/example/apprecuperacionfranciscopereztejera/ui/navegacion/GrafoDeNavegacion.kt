@@ -28,15 +28,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.apprecuperacionfranciscopereztejera.R
+import com.example.apprecuperacionfranciscopereztejera.repositorio.ViewModel
 import com.example.apprecuperacionfranciscopereztejera.ui.components.AppBar
 import com.example.apprecuperacionfranciscopereztejera.ui.components.DrawerBody
 import com.example.apprecuperacionfranciscopereztejera.ui.components.DrawerHeader
@@ -55,7 +54,7 @@ import kotlinx.coroutines.launch
     "SuspiciousIndentation", "UnusedMaterialScaffoldPaddingParameter", "RememberReturnType"
 )
 @Composable
-fun GrafoDeNavegacion() {
+fun GrafoDeNavegacion(viewModel: ViewModel) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -169,22 +168,23 @@ fun GrafoDeNavegacion() {
             content = {
                 NavHost(navController = navController, startDestination = Rutas.PantallaLogin.ruta) {
                     composable(Rutas.PantallaLogin.ruta) {
-                        PantallaLogin(navController = navController)
+                        PantallaLogin(navController = navController, viewModel)
                     }
                     composable(Rutas.PantallaNuevoUsuario.ruta) {
-                        PantallaNuevoUsuario(navController = navController)
+                        PantallaNuevoUsuario(navController = navController, viewModel)
                     }
                     composable(Rutas.PantallaHome.ruta) {
-                        PantallaHome(navController = navController)
+                        PantallaHome(navController = navController, viewModel)
                     }
                     composable(Rutas.PantallaAdd.ruta) {
-                        PantallaAdd(navController = navController)
+                        PantallaAdd(navController = navController, viewModel)
                     }
+
                     composable(Rutas.PantallaVehiculo.ruta) {
-                        VehiculoScreen(navController = navController)
+                        VehiculoScreen(navController = navController, viewModel)
                     }
                     composable(Rutas.PantallaNotificacion.ruta) {
-                        NotificationScreen(navController = navController)
+                        NotificationScreen(navController = navController, viewModel)
                     }
                 }
             }
@@ -192,22 +192,23 @@ fun GrafoDeNavegacion() {
     } else {
         NavHost(navController = navController, startDestination = Rutas.PantallaLogin.ruta) {
             composable(Rutas.PantallaLogin.ruta) {
-                PantallaLogin(navController = navController)
+                PantallaLogin(navController = navController, viewModel)
             }
             composable(Rutas.PantallaNuevoUsuario.ruta) {
-                PantallaNuevoUsuario(navController = navController)
+                PantallaNuevoUsuario(navController = navController, viewModel)
             }
             composable(Rutas.PantallaHome.ruta) {
-                PantallaHome(navController = navController)
+                PantallaHome(navController = navController, viewModel)
             }
             composable(Rutas.PantallaAdd.ruta) {
-                PantallaAdd(navController = navController)
+                PantallaAdd(navController = navController, viewModel)
             }
+
             composable(Rutas.PantallaVehiculo.ruta) {
-                VehiculoScreen(navController = navController)
+                VehiculoScreen(navController = navController, viewModel)
             }
             composable(Rutas.PantallaNotificacion.ruta) {
-                NotificationScreen(navController = navController)
+                NotificationScreen(navController = navController, viewModel)
             }
         }
     }
@@ -216,5 +217,5 @@ fun GrafoDeNavegacion() {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun LoginPreview() {
-    GrafoDeNavegacion()
+    //GrafoDeNavegacion()
 }

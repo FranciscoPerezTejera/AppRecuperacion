@@ -3,7 +3,6 @@ package com.example.apprecuperacionfranciscopereztejera.ui.pantallavehiculo
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,19 +27,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.apprecuperacionfranciscopereztejera.ui.pantallaadd.DropDownMenuCustom
+import com.example.apprecuperacionfranciscopereztejera.model.Vehicle
+import com.example.apprecuperacionfranciscopereztejera.repositorio.ViewModel
 import com.example.apprecuperacionfranciscopereztejera.ui.ruta.Rutas
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VehiculoScreen(navController: NavController) {
+fun VehiculoScreen(navController: NavController, viewModel: ViewModel) {
 
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("Item 1", "Item 2", "Item 3")
     var selectedItem by remember { mutableStateOf(items[0]) }
-    var marca by remember { mutableStateOf("") }
-    var modelo by remember { mutableStateOf("") }
     var precio by remember { mutableStateOf("") }
+    var vehicle: Vehicle? = null
+
+    /*LaunchedEffect(Unit) {
+        vehicle = viewModel.getVehicleById()
+    }*/
 
     LazyColumn(
         modifier = Modifier
@@ -49,23 +53,7 @@ fun VehiculoScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        item {
-            Text(
-                text = "Datos del vehículo",
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 20.sp,
-                color = Color.White
-            )
-            TextField(
-                value = "Tipo de Vehículo",
-                onValueChange = {  },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 30.dp, end = 30.dp, top = 20.dp, bottom = 20.dp)
-                    .background(Color(red = 62, green = 62, blue = 62))
-            )
 
-        }
         item {
             Text(
                 text = "Marca del vehículo",
@@ -74,8 +62,8 @@ fun VehiculoScreen(navController: NavController) {
                 color = Color.White
             )
             TextField(
-                value = marca,
-                onValueChange = { marca = it },
+                value = "vehicle!!.brand",
+                onValueChange = { "vehicle!!.brand = it" },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 30.dp, end = 30.dp, top = 20.dp, bottom = 20.dp)
@@ -90,14 +78,15 @@ fun VehiculoScreen(navController: NavController) {
                 color = Color.White
             )
             TextField(
-                value = modelo,
-                onValueChange = { modelo = it },
+                value = "vehicle!!.modelName",
+                onValueChange = { "vehicle!!.modelName = it" },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 30.dp, end = 30.dp, top = 20.dp, bottom = 20.dp)
                     .background(Color(red = 62, green = 62, blue = 62))
             )
         }
+        /*precio = vehicle!!.price.toString()
         item {
             Text(
                 text = "Precio del vehículo",
@@ -113,7 +102,7 @@ fun VehiculoScreen(navController: NavController) {
                     .padding(start = 30.dp, end = 30.dp, top = 10.dp, bottom = 20.dp)
                     .background(Color(red = 62, green = 62, blue = 62))
             )
-        }
+        }*/
         item {
             Text(
                 text = "Imagen del vehículo",
@@ -122,9 +111,8 @@ fun VehiculoScreen(navController: NavController) {
                 color = Color.White
             )
             TextField(
-                enabled = false,
-                value = "Link automático de la imagen",
-                onValueChange = {},
+                value = "vehicle!!.imageModel",
+                onValueChange = { "vehicle!!.imageModel = it" },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 30.dp, end = 30.dp, top = 10.dp, bottom = 20.dp)
@@ -133,7 +121,10 @@ fun VehiculoScreen(navController: NavController) {
         }
         item {
             Button(
-                onClick = { navController?.navigate(Rutas.PantallaHome.ruta) },
+                onClick = {
+                    //viewModel.updateVehicleFromUser(vehicle!!.id, vehicle!!)
+                    navController?.navigate(Rutas.PantallaHome.ruta)
+                          },
                 modifier = Modifier
                     .padding(start = 30.dp, end = 30.dp, top = 20.dp)
                     .fillMaxWidth()

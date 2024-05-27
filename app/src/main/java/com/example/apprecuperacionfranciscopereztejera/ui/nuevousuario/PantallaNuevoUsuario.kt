@@ -38,17 +38,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.apprecuperacionfranciscopereztejera.R
+import com.example.apprecuperacionfranciscopereztejera.model.UserDTO
+import com.example.apprecuperacionfranciscopereztejera.repositorio.ViewModel
 import com.example.apprecuperacionfranciscopereztejera.ui.ruta.Rutas
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaNuevoUsuario(navController: NavController?) {
+fun PantallaNuevoUsuario(navController: NavController?, viewModel: ViewModel) {
 
-    var user by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var passwordRepeat by remember { mutableStateOf("") }
     var checkedState by remember { mutableStateOf(false) }
+
     Column (
         modifier = Modifier
             .background(Color(red = 42, green = 42, blue = 42))
@@ -74,22 +76,6 @@ fun PantallaNuevoUsuario(navController: NavController?) {
             onValueChange = { email = it },
             label = { Text("Correo electrónico", color = Color.White) },
             placeholder = { Text("Email", color = Color.White) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-                .clip(RoundedCornerShape(5.dp)),
-            textStyle = TextStyle(color = Color.White),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.White,
-                unfocusedBorderColor = Color.Gray
-            )
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(
-            value = user,
-            onValueChange = { user = it },
-            label = { Text("Usuario", color = Color.White) },
-            placeholder = { Text("Usuario", color = Color.White) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
@@ -153,8 +139,12 @@ fun PantallaNuevoUsuario(navController: NavController?) {
                 fontSize = 15.sp)
         }
         Spacer(modifier = Modifier.height(30.dp))
+        val user = null
         Button(
-            onClick = { navController?.navigate(Rutas.PantallaLogin.ruta) },
+            onClick = {
+                var user = UserDTO(email, password)
+                viewModel.addUser(user)
+                navController?.navigate(Rutas.PantallaLogin.ruta) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
@@ -170,5 +160,5 @@ fun PantallaNuevoUsuario(navController: NavController?) {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun LoginPreview() {
-    PantallaNuevoUsuario(navController = null)
+    //PantallaNuevoUsuario(navController = null)
 }

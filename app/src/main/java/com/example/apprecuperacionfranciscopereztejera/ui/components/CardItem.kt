@@ -21,10 +21,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,14 +29,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.apprecuperacionfranciscopereztejera.R
-import com.example.apprecuperacionfranciscopereztejera.ui.ruta.Rutas
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CardItem(
-    item: Int,
+    brand: String,
+    modelName: String,
+    price: Double,
+    imageModel: String,
     isSelected: Boolean,
     showCheckbox: Boolean,
     onClick: () -> Unit,
@@ -55,74 +53,78 @@ fun CardItem(
                 onLongClick = onLongClick
             ),
         colors = CardDefaults.cardColors(Color(red = 62, green = 62, blue = 62)),
-        shape =  RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(10.dp),
         border = BorderStroke(4.dp, Color.White)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Tipo de vehículo: Turismo",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color.White
-            )
-
-            if (showCheckbox) {
-                Checkbox(
-                    checked = isSelected,
-                    onCheckedChange = { isChecked ->
-                        onClick()
-                    },
-                    modifier = Modifier
-                )
-            }
-        }
-        Spacer(modifier = Modifier
-            .height(1.dp)
-            .background(Color.White))
-        
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(start = 35.dp, top = 10.dp, bottom = 20.dp)
-        ) {
-
-            Image(
-                painter = painterResource(id = R.drawable.logazo),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(100.dp))
-
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+        Column {
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
-                    .weight(1f)
+                    .padding(10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Marca: Ford",
+                Text(
+                    text = "Marca de vehículo: ${brand}",
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White)
-                Text(text = "Modelo: Fiesta",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White)
-                Text(text = " Precio: 3000 €",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White)
-            }
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.White
+                )
 
+                if (showCheckbox) {
+                    Checkbox(
+                        checked = isSelected,
+                        onCheckedChange = { isChecked ->
+                            onClick()
+                        },
+                        modifier = Modifier
+                    )
+                }
+            }
+            Spacer(
+                modifier = Modifier
+                    .height(1.dp)
+                    .background(Color.White)
+            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(10.dp)
+            ) {
+                AsyncImage(
+                    model = imageModel,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .weight(1f)
+                        .padding(bottom = 10.dp)
+                )
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(3.dp)
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = "Modelo: ${modelName}",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White
+                    )
+                    Text(
+                        text = " Precio: ${price} €",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White
+                    )
+                }
+            }
         }
     }
 }
+
+
 @Preview
 @Composable
 fun LoginPreview() {

@@ -13,9 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.apprecuperacionfranciscopereztejera.repositorio.ViewModel
 
 @Composable
-fun NotificationScreen(navController: NavController) {
+fun NotificationScreen(navController: NavController, viewModel: ViewModel) {
 
     val itemList = listOf("Se borró un usuario", "Se añadio un usuario", "Se actualizó un usuario")
 
