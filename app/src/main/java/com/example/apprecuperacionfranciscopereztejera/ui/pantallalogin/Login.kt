@@ -1,31 +1,11 @@
 package com.example.apprecuperacionfranciscopereztejera.ui.pantallalogin
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.example.apprecuperacionfranciscopereztejera.R
 import com.example.apprecuperacionfranciscopereztejera.model.User
@@ -53,6 +34,7 @@ fun PantallaLogin(navController: NavController?, viewModel: ViewModel) {
         val estate by viewModel.estadoLlamada.collectAsState()
         var usuarioEncontrado by remember { mutableStateOf(false) }
         var usuario by remember { mutableStateOf<User?>(null) }
+        var showErrorDialog by remember { mutableStateOf(false) }
 
         Column(
                 modifier = Modifier
@@ -75,7 +57,7 @@ fun PantallaLogin(navController: NavController?, viewModel: ViewModel) {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                        text = "Administra tu garaje de vehiculos desde tu móvil",
+                        text = "Administra tu garaje de vehículos desde tu móvil",
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center,
                         color = Color.White
@@ -115,17 +97,17 @@ fun PantallaLogin(navController: NavController?, viewModel: ViewModel) {
                         )
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-
                 Button(
                         onClick = {
                                 usuario = userList?.find { it.email == user }
                                 usuarioEncontrado = userList!!.any { it.email == user}
                                 viewModel.user = usuario
-                                Log.e("USUARIO", viewModel.user.toString())
                                 if (usuarioEncontrado) {
                                         navController?.navigate(Rutas.PantallaHome.ruta)
+                                } else {
+                                        showErrorDialog = true
                                 }
-                                  },
+                        },
                         modifier = Modifier
                                 .fillMaxWidth()
                                 .height(50.dp)
@@ -152,8 +134,21 @@ fun PantallaLogin(navController: NavController?, viewModel: ViewModel) {
                         }
                 }
         }
-}
 
+        if (showErrorDialog) {
+                AlertDialog(
+                        onDismissRequest = { showErrorDialog = false },
+                        confirmButton = {
+                                TextButton(onClick = { showErrorDialog = false }) {
+                                        Text("Aceptar")
+                                }
+                        },
+                        title = { Text("Error de autenticación") },
+                        text = { Text("Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.") },
+                        properties = DialogProperties(dismissOnClickOutside = true)
+                )
+        }
+}
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun LoginPreview() {

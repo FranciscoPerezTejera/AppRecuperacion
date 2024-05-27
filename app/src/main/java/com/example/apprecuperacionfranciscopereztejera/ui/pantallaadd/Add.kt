@@ -148,8 +148,9 @@ fun PantallaAdd(navController: NavController?, viewModel: ViewModel) {
                 color = Color.White
             )
             OutlinedTextField(
-                value = imageModel,
-                onValueChange = { imageModel = it },
+                enabled = false,
+                value = "https://img.freepik.com/vector-premium/caracter-cara-coche-divertido-emoticon-coche-rojo-sonrie-iconos-ilustracion-vectorial_55610-8973.jpg",
+                onValueChange = {  },
                 placeholder = { Text("Marca del vehiculo", color = Color.White) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -184,9 +185,9 @@ fun PantallaAdd(navController: NavController?, viewModel: ViewModel) {
         item {
             Button(
                 onClick = {
-                    if (imageModel == null || imageModel == "") {
+                    /*if (imageModel == null || imageModel == "") {
                         imageModel = "https://img.freepik.com/vector-premium/caracter-cara-coche-divertido-emoticon-coche-rojo-sonrie-iconos-ilustracion-vectorial_55610-8973.jpg"
-                    }
+                    }*/
                     var vehiculo = viewModel.newVehicle(marca, modelo, precio.toDouble(), imageModel)
 
                     if (vehiculo != null) {
